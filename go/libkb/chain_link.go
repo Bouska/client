@@ -281,7 +281,8 @@ func (c *ChainLink) GetPayloadJSON() *jsonw.Wrapper {
 
 func (c *ChainLink) ToSigChainLocation() keybase1.SigChainLocation {
 	return keybase1.SigChainLocation{
-		Seqno:   c.GetSeqno(),
+		Seqno: c.GetSeqno(),
+		// @@@ umm...
 		SeqType: keybase1.SeqType_PUBLIC,
 	}
 }
@@ -728,12 +729,17 @@ func (c *ChainLink) verifyPayloadV2() error {
 	prev := c.getPrevFromPayload()
 	curr := c.getPayloadHash()
 	linkType, err := c.GetSigchainV2Type()
-
 	if err != nil {
 		return err
 	}
+	// @@@ umm...
+	seqType := keybase1.SeqType_PUBLIC
+	// seqType, err := c.getSeqTypeFromPayload()
+	// if err != nil {
+	// 	return err
+	// }
 
-	if err := ol.AssertFields(version, seqno, prev, curr, linkType); err != nil {
+	if err := ol.AssertFields(version, seqno, prev, curr, linkType, seqType); err != nil {
 		return err
 	}
 
